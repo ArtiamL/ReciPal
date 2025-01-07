@@ -8,7 +8,7 @@
 !htdocs/ReciPal/
 
 # Exclude the schema.sql file from being ignored
-!recipal_db.sql
+!schema.sql
 
 # Exclude README.md
 !README.md
