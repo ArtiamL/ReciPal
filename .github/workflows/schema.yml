@@ -14,7 +14,7 @@ jobs:
 
       - name: Export MySQL Database Schema
         run: |
-          mysqldump -u ${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} ${{ secrets.DB_NAME }} > schema.sql
+          mysqldump -u ${{ secrets.DB_USERNAME }} -p ${{ secrets.DB_NAME }} > schema.sql
 
       - name: Commit and Push schema.sql
         run: |
