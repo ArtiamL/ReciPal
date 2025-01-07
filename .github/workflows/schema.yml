@@ -1,0 +1,23 @@
+name: Database Schema Export
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  export_schema:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Export MySQL Database Schema
+        run: |
+          mysqldump -u ${{ secrets.DB_USERNAME }} -p ${{ secrets.DB_NAME }} > schema.sql
+
+      - name: Commit and Push schema.sql
+        run: |
+          git add schema.sql
+          git commit -m "Update database schema"
+          git push origin main
