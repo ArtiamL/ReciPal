@@ -5,13 +5,10 @@
 !.gitignore
 
 # Exclude the htdocs/recipal directory from being ignored
-!htdocs/recipal/
+!htdocs/ReciPal/
 
 # Exclude the schema.sql file from being ignored
-!schema.sql
-
-# Exclude SQL Queries from being ignored
-!sqlQueries
+!recipal_db.sql
 
 # Exclude README.md
 !README.md
