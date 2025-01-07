@@ -13,6 +13,9 @@
 # Exclude README.md
 !README.md
 
+# Exclude created queries
+!queries/
+
 # Exclude my.ini
 !mysql/bin/my.ini
 
