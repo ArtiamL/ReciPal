@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS user (
-    user_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    user_uuid CHAR(36) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    username VARCHAR(30) NOT NULL,
-    password_hash VARBINARY(32) NOT NULL,
-    active BOOLEAN NOT NULL
-)

@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS role (
-    role_id INT NOT NULL PRIMARY KEY,
-    role_name VARCHAR(30) NOT NULL
-)
