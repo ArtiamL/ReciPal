@@ -5,8 +5,10 @@
 !.gitignore
 
 # Exclude the htdocs/recipal directory from being ignored
-!htdocs/*
-!htdocs/ReciPal/*
+htdocs/*
+
+!htdocs
+!htdocs/ReciPal/
 
 # Exclude the schema.sql file from being ignored
 !schema.sql
