@@ -4,21 +4,19 @@
 # Eclude .gitignore
 !.gitignore
 
-# Exclude the htdocs/recipal directory from being ignored
+# Exclude the htdocs/recipal and htdocs/queries directories from being ignored
 !htdocs/
 
 htdocs/*
 
 !htdocs/ReciPal/
+!htdocs/queries/
 
 # Exclude the schema.sql file from being ignored
 !schema.sql
 
 # Exclude README.md
 !README.md
-
-# Exclude created queries
-!queries
 
 # Exclude my.ini
 !mysql/bin/my.ini

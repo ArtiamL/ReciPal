@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(30) NOT NULL,
     password_hash VARBINARY(32) NOT NULL,
     active BOOLEAN NOT NULL
-)
+);

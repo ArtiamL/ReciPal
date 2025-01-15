@@ -1,8 +1,9 @@
 <?php
 
-namespace database;
-
+//namespace global;
 require_once "config.php";
+
+namespace database;
 
 class Database {
     private static $instance = null;
@@ -18,6 +19,7 @@ class Database {
         try {
             $this->pdo = new \PDO("mysql:host=$host;dbname=$db", $username, $password);
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
             echo "Connected successfully";
         } catch (\PDOException $e) {
             echo "Connection failed: " . $e->getMessage();

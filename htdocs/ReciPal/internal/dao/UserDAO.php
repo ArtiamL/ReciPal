@@ -1,16 +1,13 @@
 <?php
 
-namespace config\dao;
+namespace internal\dao;
 
-use PDO;
-
-class UserDAO implements DAO
+final class UserDAO extends DAO
 {
-    private $db;
 
     public function __construct(\PDO $db)
     {
-        $this->db = $db;
+        parent::__construct($db, "users");
     }
 
     public function getUserByEmail($email): array
@@ -18,24 +15,27 @@ class UserDAO implements DAO
         $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->bindParam(":email", $email);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch();
     }
 
     public function create($user)
     {
-        $stmt  = $this->db->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-        $stmt->bindParam(":name", $user->getName());
+        $stmt  = $this->db->prepare("INSERT INTO users (email, username, password_hash, active) VALUES (:email, :username, :password_hash, :active)");
         $stmt->bindParam(":email", $user->getEmail());
+        $stmt->bindParam(":name", $user->getName());
         $stmt->bindParam(":password", $user->getPassword());
+        $stmt->bindParam(":active", $user->getActive());
         $stmt->execute();
+        return $this->getUUIDFromID($this->db->lastInsertId());
     }
 
-    function findById($id): array
+    // TODO: refactor for API.
+    public function getUUIDFromID($id): string
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt = $this->db->prepare("SELECT user_uuid FROM users WHERE user_id = :id");
         $stmt->bindParam(":id", $id);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetchColumn();
     }
 
     public function findByUUId($uuid): array
@@ -43,14 +43,7 @@ class UserDAO implements DAO
         $stmt = $this->db->prepare("SELECT * FROM users WHERE uuid = :uuid");
         $stmt->bindParam(":uuid", $uuid);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
-
-    function getAll(): array
-    {
-        $stmt = $this->db->prepare("SELECT * FROM users");
-        $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetch();
     }
 
     function update($user)
