@@ -1,6 +1,6 @@
 <?php
 
-namespace internal\dao;
+namespace lib\dao;
 
 final class UserDAO extends DAO
 {

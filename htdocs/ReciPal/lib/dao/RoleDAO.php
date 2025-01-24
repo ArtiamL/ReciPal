@@ -1,8 +1,6 @@
 <?php
 
-namespace internal\dao;
-
-use internal\dao\DAO;
+namespace lib\dao;
 
 class RoleDAO extends DAO
 {

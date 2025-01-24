@@ -1,19 +1,44 @@
 <?php
 
-namespace internal\dao;
+namespace lib\dao;
 abstract class DAO
 {
     protected $db;
-    private $table;
+    private $tables = [
+        "permissions",
+        "roles",
+        "users",
+        "recipes",
+        "user_role",
+        "role_permission",
+    ];
 
+    protected $table;
+
+    /**
+     * @throws \Exception If table does not exist in list of tables.
+     */
     protected function __construct($db, $table)
     {
         $this->db = $db;
 
-        $this->table = $table;
+        $this->setTable($table);
+    }
+    abstract function create($obj);
+    abstract function update($obj); // TODO: decide implementation. Should all fields be updated or only ones passed?
+
+    protected final function getTables(): array
+    {
+        return $this->table;
     }
 
-    abstract function create($obj);
+    protected final function setTable(string $table) {
+        if (!in_array($table, $this->table)) {
+            throw new \Exception("Table '$table' does not exist");
+        }
+
+        $this->table = $table;
+    }
 
     protected function findById($id): array
     {
@@ -29,8 +54,6 @@ abstract class DAO
         $stmt->execute();
         return $stmt->fetchAll();
     }
-
-    abstract function update($obj); // TODO: decide implementation. Should all fields be updated or only ones passed?
 
     protected function delete($obj)
     {

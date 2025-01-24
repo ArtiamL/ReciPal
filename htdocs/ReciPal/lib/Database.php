@@ -1,9 +1,7 @@
 <?php
-
-//namespace global;
-require_once "config.php";
-
 namespace database;
+
+require_once "config.php";
 
 class Database {
     private static $instance = null;

@@ -1,6 +1,6 @@
 <?php
 
-namespace config\entities;
+namespace lib\entities;
 
 class User {
     private $UserID;
@@ -20,8 +20,6 @@ class User {
     public function getUserID() {
         return $this->UserID;
     }
-
-
 
     public function getUUID() {}
 }

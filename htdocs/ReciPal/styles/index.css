@@ -1,0 +1,244 @@
+:root {
+    /* Maybe use #ffedd5 */
+    --primary: #FFEAA7;
+    --primary-darker: #e6d396;
+    --white: #e9f2fa;
+    --white-darker: #e4f0fb;
+    --dark: #2A2A2A;
+    --secondary: #7fd1ae;
+    --secondary-darker: #00c6b1;
+    --tertiary: #EB5E28;
+    --text-grey: #4D535B;
+
+    font-family: 'IMB Plex Sans', sans-serif;
+    font-weight: 500;
+
+    scroll-behavior: smooth;
+}
+
+html {
+    overflow-x: hidden;
+
+    height: 100%;
+
+    /*background-color: var(--white);*/
+    background: linear-gradient(to bottom right, var(--white), var(--white-darker));
+    color: var(--text-grey);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, li {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+
+    background: linear-gradient(to bottom right, var(--secondary), var(--secondary-darker));
+    background-clip: text;
+    color: transparent;
+}
+
+h1 {
+    position : relative;
+    top: 1.5rem;
+
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+h4{
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-style: italic;
+
+    /* color: var(--primary-light); */
+}
+
+hr {
+    width: 85%;
+    background-color: var(--secondary-darker);
+}
+
+p {
+    text-align: justify;
+}
+
+a, button {
+    font-weight: 600;
+    font-style: italic;
+    color: var(--secondary);
+}
+
+li a:hover {
+    transition: color 0.3s ease-in;
+    color: var(--dark);
+}
+
+svg {
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke: var(--secondary);
+}
+
+ul {
+    display: inherit;
+    flex-flow: inherit;
+    flex-grow: 1;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    color: var(--secondary);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    border-radius: 1rem;
+    background: linear-gradient(145deg, var(--white), var(--white-darker));
+    box-shadow:  0.625rem 0.625rem 1rem #bebebe, -0.625rem -0.625rem 1rem #ffffff;
+}
+
+.buttonLight {
+    /*border-radius: 3.125rem;*/
+    border-radius: 1rem;
+    background: linear-gradient(145deg, #fffab3, #e6d396);
+    box-shadow:  0.625rem 0.625rem 1rem #d9c78e, -0.625rem -0.625rem 1rem #ffffc0;
+}
+
+.buttonLight:active {
+    background: linear-gradient(145deg, #e6d396, #fffab3);
+}
+
+.card {
+    border-radius: 50px;
+    background: #e0e0e0;
+    box-shadow:  0.625rem 0.625rem 1rem #bebebe, -0.625rem -0.625rem 1rem #ffffff;
+}
+
+.cardLight {
+    border-radius: 50px;
+    background: #FFEAA7;
+    box-shadow:  0.625rem 0.625rem 1rem #d9c78e, -0.625rem -0.625rem 1rem #ffffc0;
+}
+
+.menuIcon {
+    width: 3.583rem;
+    height: 2.667rem;
+    stroke: var(--secondary);
+
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    /*bottom: 1rem;*/
+    /*left: 45%;*/
+    z-index: 1000;
+}
+
+#menuIconOpen path#line1 {
+    transition: d 0.3s ease-in;
+    d: path("M3 3L29 29")
+}
+
+#menuIconOpen path#line2 {
+    transition: display 0.3s ease-in;
+    display: none;
+}
+
+#menuIconOpen path#line3 {
+    transition: d 0.3s ease-in;
+    d: path("M3 29L29 3")
+}
+
+.menu {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in, visibility 0s 0.5s;
+
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1.25rem;
+    justify-content: space-evenly;
+
+    background-color: var(--primary);
+}
+
+.menu#open {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s ease-in;
+}
+
+.links {
+    /*display: flex;*/
+    /*flex-flow: row wrap;*/
+    /*gap: 1.25rem;*/
+    /*justify-content: space-evenly;*/
+
+    position: relative;
+    top: 10%;
+
+    width: 100%;
+    height: 80%;
+
+}
+
+.menu .links li {
+    flex: 0 0 35%;
+    font-size: 1.5rem;
+    height: 25%;
+}
+
+.menu .buttonLight {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--primary);
+}
+
+.menu .buttonLight h4 {
+    position: relative;
+    top: 2rem;
+
+    font-size: 1.25rem;
+}
+
+main section {
+    /*display: inherit;*/
+    width: 100%;
+}
+
+.recipe_posts {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+
+    overflow: scroll;
+}
