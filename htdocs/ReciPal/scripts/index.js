@@ -48,23 +48,3 @@ document.onreadystatechange = function () {
         // container.appendChild(post_collapsed);
     }
 }
-
-window.onload = () => {
-    const menuIcon = document.querySelector(".menuIcon"),
-        topbar = document.getElementById("topbar"),
-        menu = document.querySelector(".menu");
-
-    let menuOpen = false;
-    menuIcon.onclick = () => {
-        if (!menuOpen) {
-            menuIcon.id = "menuIconOpen";
-            menu.id = "open";
-            menuOpen = true;
-        }
-        else {
-            menuIcon.removeAttribute('id');
-            menu.removeAttribute('id');
-            menuOpen = false;
-        }
-    }
-}

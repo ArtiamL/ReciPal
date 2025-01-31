@@ -5,12 +5,13 @@ abstract class DAO
 {
     protected $db;
     private $tables = [
-        "permissions",
-        "roles",
-        "users",
-        "recipes",
-        "user_role",
-        "role_permission",
+        'permissions',
+        'roles',
+        'users',
+        'recipes',
+        'user_role',
+        'role_permission',
+        'curated_recipes',
     ];
 
     protected $table;
@@ -33,7 +34,7 @@ abstract class DAO
     }
 
     protected final function setTable(string $table) {
-        if (!in_array($table, $this->table)) {
+        if (!in_array($table, $this->tables)) {
             throw new \Exception("Table '$table' does not exist");
         }
 

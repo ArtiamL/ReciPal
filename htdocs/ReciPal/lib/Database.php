@@ -1,5 +1,5 @@
 <?php
-namespace database;
+namespace lib;
 
 require_once "config.php";
 
@@ -18,14 +18,14 @@ class Database {
             $this->pdo = new \PDO("mysql:host=$host;dbname=$db", $username, $password);
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-            echo "Connected successfully";
+            syslog(LOG_INFO,"Connected successfully");
         } catch (\PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
+            syslog(LOG_ALERT, "Connection failed: " . $e->getMessage());
         }
     }
 
     // Singleton principle: only one connection is active.
-    public static function getInstance() {
+    public static function getInstance(): \PDO {
         if (self::$instance === null) {
             self::$instance = new Database();
         }

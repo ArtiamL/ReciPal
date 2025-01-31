@@ -31,4 +31,17 @@ class RoleDAO extends DAO
         $stmt->bindParam(":id", $obj->getId());
         $stmt->execute();
     }
+
+    public function getPermissionsForRole($role_name) {
+        $stmt = $this->db->prepare("SELECT p.permission_name FROM permissions p
+            JOIN role_permission rp ON p.permission_id = rp.permission_id
+            WHERE rp.role_id = (SELECT role_id FROM roles WHERE role_name = :role_name)");
+        $stmt->bindParam(":role_name", $role_name);
+        $stmt->execute();
+        $permisisons = $stmt->fetchAll();
+
+        foreach ($permisisons as $permisison) {
+
+        }
+    }
 }

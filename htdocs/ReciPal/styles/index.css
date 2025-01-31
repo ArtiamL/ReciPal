@@ -37,6 +37,7 @@ h1, h2, h3, h4, h5, h6, li {
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 500;
 
+    /*color: var(--text-grey);*/
     background: linear-gradient(to bottom right, var(--secondary), var(--secondary-darker));
     background-clip: text;
     color: transparent;

@@ -1,23 +1,52 @@
 <?php
 
-
-use controllers\ErrorController;
-use controllers\TestController;
+use controllers\SessionController;
+use lib\Database;
+use lib\dao\UserDAO;
+use lib\models\AuthModel;
 use lib\Router;
 
-require_once __DIR__ . '/../lib/Router.php';
-require_once __DIR__ . '/../controllers/ErrorController.php';
-require_once __DIR__ . '/../controllers/TestController.php';
+spl_autoload_register(function ($class)
+{
+    if (file_exists(__DIR__ . "/../{$class}.php")) {
+        error_log(__DIR__ . "/../{$class}.php");
+        require_once __DIR__ . "/../{$class}.php";
+    }
+});
+
+// Create router instance
+$router = Router::getRouter();
+
+$db = Database::getInstance();
+
+try {
+    $userDAO = new UserDAO($db);
+} catch (Exception $e) {
+    error_log($e->getMessage());
+}
+
+if (isset($userDAO)) {
+    $authModel = new AuthModel($userDAO);
+    $sessionController = new SessionController($authModel);
+
+    $router->post("/login", [$sessionController, "login"]);
+}
 
 
-$router = new Router();
 
-$test = new TestController("This should only be visible if constructor is called.");
 
-$router->setErrorController([ErrorController::class, 'show404']);
-$router->add('GET', '/test/', [$test, 'test']);
+$test = new \controllers\TestController("Hi!");
 
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$path = str_ireplace('/ReciPal/api/', '', $path);
+$router->addMiddleware('/admin', [\lib\middlewares\AuthMiddleware::class, 'handle'], ['admin']);
 
-$router->dispatch($path);
+// Register the routes
+$router->get('/test', [$test, 'test']);
+
+$router->get("/", function() {
+    echo "Hello, world!";
+});
+
+
+
+// Dispatch the router
+$router->dispatch();

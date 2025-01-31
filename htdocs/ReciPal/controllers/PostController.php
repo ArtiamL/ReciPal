@@ -5,16 +5,21 @@ namespace controllers;
 
 use models\Model;
 
-class PostController {
-
+class PostController{
     private Model $model;
 
-    public function setModel(Model $model): void {
+
+    public function __construct(Model $model){
         $this->model = $model;
     }
 
     public function getCuratedPostShort() {
         $post = $this->model->getCuratedPosts();
+
+    }
+
+    function injectModel(Model $model)
+    {
 
     }
 }

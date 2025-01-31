@@ -6,7 +6,7 @@ use lib\dao\DAO;
 
 final class RecipeDAO extends DAO
 {
-    public function __construct($db) {
+    public function __construct(\PDO $db) {
         parent::__construct($db, "recipes");
     }
 
@@ -18,9 +18,5 @@ final class RecipeDAO extends DAO
     function update($obj)
     {
         // TODO: Implement update() method.
-    }
-
-    public function getCuratedRecipes() {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE curated_by IS NOT NULL");
     }
 }
