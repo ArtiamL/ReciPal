@@ -42,7 +42,7 @@ class SessionController
             http_response_code(200);
             // Redirect to referring page.
             error_log("Referrer: " . $_SERVER['HTTP_REFERER']);
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
+//            header('Location: ' . $_SERVER['HTTP_REFERER']);
             error_log("Login Successful");
             echo json_encode(["Message" => "Logged in Successfully!"]);
         } else {
