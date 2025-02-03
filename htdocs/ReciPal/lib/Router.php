@@ -94,6 +94,7 @@ class Router
     {
         // Normalise first
         $path = $this->normalisePath($_SERVER['REQUEST_URI']);
+        error_log("path: $path");
 
         if (isset(self::$middlewares[$path])) {
             [$middleware, $params] = self::$middlewares[$path];
@@ -102,8 +103,8 @@ class Router
 
         $routes = self::$routes[$_SERVER['REQUEST_METHOD']] ?? [];
 
-//        error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
-//        error_log("Request URI: " . $_SERVER['REQUEST_URI']);
+        error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+        error_log("Request URI: " . $_SERVER['REQUEST_URI']);
 
 
         // Iterate routes by the filter above (REQUEST_METHOD)
@@ -111,13 +112,13 @@ class Router
 
             // Transform route into regex, callback function determines how matches are replaced.
             $routeRegex = preg_replace_callback(self::REGEX_PATTERN, function ($matches) {
-                /* if pattern is provided after : (colon), use given patter, else replace with matching alphanumeric
+                /* if pattern is provided after : (colon), use given pattern, else replace with matching alphanumeric
                  * chars, hyphens, underscores.
                  */
                 return isset($matches[1]) ? '(' . $matches[2] . ')' : '([a-zA-Z0-9_-]+)';
             }, $route);
 
-            /* Delimit for further matching, '@' is the delimiter as we're working with '/' in the uri.
+            /* Delimit for further matching, '#' is the delimiter as we're working with '/' in the uri.
              * '^' anchors matches at start of string, '$' anchors matches to end of string, requiring the whole string
              * to match.
              */
@@ -130,9 +131,9 @@ class Router
 
             // Check if the requested route matches the current pattern.
             if (preg_match($routeRegex, $path, $matches)) {
-                error_log($routeRegex);
-                error_log($path);
-                error_log(print_r($matches, true));
+//                error_log($routeRegex);
+//                error_log($path);
+//                error_log(print_r($matches, true));
 
                 // Shift the start of the array, removing first matches and getting any user-requested params.
                 array_shift($matches);
@@ -140,7 +141,7 @@ class Router
 
                 $paramsNames = [];
 
-                // Set to /
+                // Set to '/'
                 if (preg_match_all(self::REGEX_PATTERN, $route, $matches)) {
                     $paramsNames = $matches[1];
                 }

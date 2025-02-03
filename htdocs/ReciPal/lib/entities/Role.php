@@ -9,6 +9,18 @@ class Role {
 
     public function __construct(string $name, array $permissions = []) {
         $this->name = $name;
-        $this->permissions = array_values($permissions);
+        $this->permissions = $permissions;
+    }
+
+    public function getName(): string {
+        return $this->name;
+    }
+
+    public function addPermissions(array $permissions) {
+        $this->permissions = $permissions;
+    }
+
+    public function getPermissions() {
+        return $this->permissions;
     }
 }

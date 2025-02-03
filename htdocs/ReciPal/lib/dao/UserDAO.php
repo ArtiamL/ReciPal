@@ -13,43 +13,55 @@ final class UserDAO extends DAO
         parent::__construct($db, "users");
     }
 
-    public function getUserByEmail($email): ?User
-    {
+    public function getUserByEmail($email): array|bool {
         $stmt = $this->db->prepare("SELECT u.user_uuid, u.email, u.username, u.password_hash, u.active, GROUP_CONCAT(r.role_name SEPARATOR ', ') AS roles
-            FROM {$this->table} u
+            FROM `{$this->table}` u
             LEFT JOIN user_role ur on u.user_id = ur.user_id
             LEFT JOIN roles r on ur.role_id = r.role_id
             WHERE u.email = :email
             GROUP BY u.user_id;");
         $stmt->bindParam(":email", $email);
         $stmt->execute();
-        $data = $stmt->fetch();
 
-        if (!$data) return null;
+        $row = $stmt->fetch();
 
-        error_log(print_r($data, true));
+        if (!$row)
+            return false;
 
-        $roles = [];
+        $row['roles'] = $row['roles'] ? array_map('trim', explode(',', $row['roles'])) : [];
 
-        foreach ($data as $col) {
-            error_log($col);
-            if (!isset($roles[$data["roles"]])) {
-                $roles[$data["roles"]] = new Role($data["roles"]);
-            }
-        }
-
-        return new User($data, $roles);
+        return $row;
     }
 
-    public function create($user)
-    {
-        $stmt  = $this->db->prepare("INSERT INTO {$this->table} (email, username, password_hash, active) VALUES (:email, :username, :password_hash, :active)");
-        $stmt->bindParam(":email", $user->getEmail());
-        $stmt->bindParam(":name", $user->getName());
-        $stmt->bindParam(":password", $user->getPassword());
-        $stmt->bindParam(":active", $user->getActive());
-        $stmt->execute();
-        return $this->getUUIDFromID($this->db->lastInsertId());
+    public function create($user): bool {
+        try {
+            // Use transaction for full rollback on fail with insertion into multiple tables.
+            $this->db->beginTransaction();
+
+            $stmt = $this->db->prepare("INSERT INTO {$this->table}(`user_uuid`, `email`, `username`, `password_hash`) VALUES (:uuid, :email, :username, :password)");
+            $stmt->bindParam(":uuid", $user->getUUID());
+            $stmt->bindParam(":email", $user->getEmail());
+            $stmt->bindParam(":username", $user->getUsername());
+            $stmt->bindParam(":password", $user->getPassword());
+            $stmt->execute();
+            $lastInsertId = $this->db->lastInsertId();
+
+            $stmt = $this->db->prepare("SELECT role_id FROM roles WHERE role_name = 'enduser'");
+            $stmt->execute();
+            $roleID = $stmt->fetchColumn();
+
+            $stmt = $this->db->prepare("INSERT INTO user_role (`user_id`, `role_id`) VALUES (:user_id, :role_id)");
+            $stmt->bindParam(":user_id", $lastInsertId);
+            $stmt->bindParam(":role_id", $roleID);
+            $stmt->execute();
+
+            $this->db->commit();
+
+            return true;
+        } catch (\PDOException $e) {
+            $this->db->rollBack();
+            return false;
+        }
     }
 
     // TODO: refactor for API.
@@ -79,12 +91,10 @@ final class UserDAO extends DAO
         $stmt->execute();
     }
 
-    function delete($obj)
-    {
-        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = :id");
-        $stmt->bindParam(":id", $obj->getId());
-        $stmt->execute();
+    function delete($user) {
+        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE user_uuid = :id");
+        $stmt->bindParam(":id", $user->getUUID());
+
+        return $stmt->execute();
     }
 }
-
-?>

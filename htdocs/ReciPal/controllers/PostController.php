@@ -3,18 +3,19 @@ declare(strict_types=1);
 
 namespace controllers;
 
+use lib\models\PostModel;
 use models\Model;
 
 class PostController{
-    private Model $model;
+    private PostModel $model;
 
 
-    public function __construct(Model $model){
+    public function __construct(PostModel $model){
         $this->model = $model;
     }
 
     public function getCuratedPostShort() {
-        $post = $this->model->getCuratedPosts();
+        $post = $this->model->getPosts(true);
 
     }
 

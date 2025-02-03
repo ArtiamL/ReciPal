@@ -2,6 +2,8 @@
 
 namespace lib\dao;
 
+use lib\entities\Permission;
+
 class RoleDAO extends DAO
 {
 
@@ -38,10 +40,6 @@ class RoleDAO extends DAO
             WHERE rp.role_id = (SELECT role_id FROM roles WHERE role_name = :role_name)");
         $stmt->bindParam(":role_name", $role_name);
         $stmt->execute();
-        $permisisons = $stmt->fetchAll();
-
-        foreach ($permisisons as $permisison) {
-
-        }
+        return $stmt->fetchAll();
     }
 }

@@ -2,17 +2,16 @@
 
 namespace lib\models;
 
-use lib\dao\DAO;
-use models\Model;
+use config\dao\RecipeDAO;
 
 class PostModel {
     private $dao;
 
-    public function __construct(DAO $dao) {
+    public function __construct(RecipeDAO $dao) {
         $this->dao = $dao;
     }
 
-    public function getPosts(bool $curated){
+    public function getPosts(bool $curated): ?Post {
         $this->dao->getAll();
     }
 }

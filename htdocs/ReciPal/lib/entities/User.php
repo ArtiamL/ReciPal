@@ -11,16 +11,20 @@ class User {
     private $roles = [];
 
     public function __construct(array $data, array $roles = []) {
-        $this->UUID = $data['user_uuid'];
+        $this->UUID = $data['user_uuid'] ?? null;
         $this->username = $data['username'];
         $this->email = $data['email'];
-        $this->passwordHash = $data['password_hash'];
-        $this->isActive = $data['active'];
+        $this->passwordHash = $data['password_hash'] ?? null;
+        $this->isActive = (bool) $data['active'];
         $this->roles = array_values($roles);
     }
 
     public function getUUID() {
         return $this->UUID;
+    }
+
+    public function setUUID($UUID) {
+        $this->UUID = $UUID;
     }
 
     public function getEmail() {

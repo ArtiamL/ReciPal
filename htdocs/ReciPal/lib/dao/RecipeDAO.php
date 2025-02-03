@@ -19,4 +19,8 @@ final class RecipeDAO extends DAO
     {
         // TODO: Implement update() method.
     }
+
+    public function getPostFromCriteria(array $criteria) {
+
+    }
 }
