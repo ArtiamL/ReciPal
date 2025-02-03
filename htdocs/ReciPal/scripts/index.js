@@ -104,6 +104,23 @@ window.onload = function () {
             form.classList.add('was-validated')
         }, false);
     });
+
+    document.body.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        const form = event.target;
+
+        console.log(form);
+
+        const result = fetch(form.action, {
+            method: form.method,
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(new FormData(form)),
+        })
+            .then(res => res.json())
+            .then(json => console.log(json))
+            .catch(error => console.log(error));
+    });
 }
 
 function appendAlert(container, message, type) {
