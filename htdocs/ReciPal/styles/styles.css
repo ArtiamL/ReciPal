@@ -6,6 +6,11 @@
     color: white;
 }
 
+#foodCarousel .carousel-item img {
+    height: 30vh;
+    object-fit: cover;
+}
+
 .card-container {
     display: flex;
     flex-wrap: wrap;

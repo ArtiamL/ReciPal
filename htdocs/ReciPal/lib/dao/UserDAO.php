@@ -38,7 +38,7 @@ final class UserDAO extends DAO
             // Use transaction for full rollback on fail with insertion into multiple tables.
             $this->db->beginTransaction();
 
-            $stmt = $this->db->prepare("INSERT INTO {$this->table}(`user_uuid`, `email`, `username`, `password_hash`) VALUES (:uuid, :email, :username, :password)");
+            $stmt = $this->db->prepare("INSERT INTO `{$this->table}`(`user_uuid`, `email`, `username`, `password_hash`) VALUES (:uuid, :email, :username, :password)");
             $stmt->bindParam(":uuid", $user->getUUID());
             $stmt->bindParam(":email", $user->getEmail());
             $stmt->bindParam(":username", $user->getUsername());
@@ -65,24 +65,21 @@ final class UserDAO extends DAO
     }
 
     // TODO: refactor for API.
-    public function getUUIDFromID($id): string
-    {
+    public function getUUIDFromID($id): string {
         $stmt = $this->db->prepare("SELECT user_uuid FROM {$this->table} WHERE user_id = :id");
         $stmt->bindParam(":id", $id);
         $stmt->execute();
         return $stmt->fetchColumn();
     }
 
-    public function findByUUId($uuid): array
-    {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE uuid = :uuid");
+    public function getIDFromUUId($uuid): array {
+        $stmt = $this->db->prepare("SELECT u.user_id FROM `{$this->table}` WHERE uuid = :uuid");
         $stmt->bindParam(":uuid", $uuid);
         $stmt->execute();
         return $stmt->fetch();
     }
 
-    function update($user)
-    {
+    function update($user) {
         $stmt  = $this->db->prepare("UPDATE {$this->table} SET name = :name, email = :email, password = :password WHERE id = :id");
         $stmt->bindParam(":id", $user->getId());
         $stmt->bindParam(":name", $user->getName());

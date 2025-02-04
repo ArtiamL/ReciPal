@@ -32,10 +32,10 @@
     <div id="foodCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="./img/recipebanner1jpg.jpg" class="d-block w-100" alt="Biryani">
+                <img src="img/recipebanner1.jpg" class="d-block w-100" alt="Biryani">
             </div>
             <div class="carousel-item">
-                <img src="./img/recipebanner2webp.webp" class="d-block w-100" alt="Chickpea Curry">
+                <img src="img/recipebanner2.webp" class="d-block w-100" alt="Chickpea Curry">
             </div>
             <div class="carousel-item">
                 <img src="./img/recipe3.webp" class="d-block w-100" alt="Chicken Tikka Masala">
@@ -51,9 +51,10 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
     </div>
-    <h1 class="text-center mt-4">Our Top Trending Recipes</h1>
+    <h1 class="text-center mt-4">Our Favourite Recipes</h1>
     <div class="container mt-4">
         <div class="row">
+            <?php for ?>
             <div class="col-md-6 col-lg-3">
                 <div class="card">
                     <img src="./img/biryani.jpg" class="card-img-top" alt="Biryani">

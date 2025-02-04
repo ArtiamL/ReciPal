@@ -104,6 +104,14 @@ window.onload = function () {
             form.classList.add('was-validated')
         }, false);
     });
+
+    const myCarouselElement = document.querySelector('#foodCarousel')
+
+    const carousel = new bootstrap.Carousel(myCarouselElement, {
+        interval: 2000,
+        touch: false
+    })
+
 }
 
 function appendAlert(container, message, type) {
