@@ -73,7 +73,9 @@ class SessionController
         switch ($this->authModel->register($data)) {
             case 201:
                 http_response_code(201);
-                echo json_encode(["message" => "Registered Successfully!"]);
+                echo json_encode([
+                    "message" => "Registered Successfully!",
+                ]);
                 break;
             case 409:
                 http_response_code(401);

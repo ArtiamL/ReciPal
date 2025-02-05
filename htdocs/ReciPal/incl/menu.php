@@ -23,29 +23,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="./categories.php">About</a>
                 </li>
-                <?php if (!isset($_SESSION['username'])): ?>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">
-                            <i class="fa-solid fa-user"></i> Login/Sign Up
-                        </button>
-                    </li>
-                <?php else: ?>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user"></i> <?php echo $_SESSION['username'] ?>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form action="./api/logout" method="POST">
-                                <button type="submit" class="dropdown-item"><i class="fa-solid fa-power-off"></i> Logout</button>
-                            </form>
-                        </li>
-                      </ul>
-                    </li>
-                <?php endif; ?>
+                <li class="nav-item" id="loginSection">
+                </li>
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

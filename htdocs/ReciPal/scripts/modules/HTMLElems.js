@@ -1,4 +1,4 @@
-export function appendAlert(code, container, message) {
+export function appendAlert(container, message, code = null) {
     let alertType;
 
     switch (code) {
@@ -7,17 +7,18 @@ export function appendAlert(code, container, message) {
             alertType = 'success';
             break;
         // const redirect = (location.reload(), 5000) => await new Promise(resolve => setTimeout(resolve, 5000));
-        case 400:
-        case 500:
-            alertType = 'danger';
-            break;
         case 409:
             alertType = 'warning';
+            break;
+        case 400:
+        case 500:
+        default:
+            alertType = 'danger';
             break;
     }
 
     return container.innerHTML = [
-        `<div class="alert alert-${alertType} alert-dismissible d-flex align-items-center" role="alert">
+        `<div class="alert alert-${alertType} alert-dismissible d-flex align-items-center fade show" role="alert" id="loginSignUpAlert">
             <div>${message}</div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>`
@@ -34,22 +35,32 @@ export function loginButton(container) {
     ].join('')
 }
 
-export function loggedInDropdown(container) {
-    return container.innerHTML = [
+export function loggedInDOMUpdate(container) {
+    const html = container.innerHTML = [
         `<li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user"></i> <?php echo $_SESSION['username'] ?>
+                <i class="fa-solid fa-user"></i> ${sessionStorage.getItem('username')}
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                <li><a class="dropdown-item" href="#" id="profileLink"><i class="fa-solid fa-user"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="#" id="settingsLink"><i class="fa-solid fa-gear"></i> Settings</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li>
-                    <form action="./api/logout" method="POST">
-                        <button type="submit" class="dropdown-item"><i class="fa-solid fa-power-off"></i> Logout</button>
-                    </form>
-                </li>
+                <li><button type="submit" class="dropdown-item" id="logoutButton"><i class="fa-solid fa-power-off"></i> Logout</button></li>
             </ul>
         </li>`
-    ].join('')
+    ].join('');
+
+    const logoutButton = document.getElementById('logoutButton');
+
+    logoutButton.addEventListener('click', (e) => {
+        sessionStorage.clear();
+        loginButton(container);
+    });
+
+    const alert = bootstrap.Alert.getOrCreateInstance('#loginSignUpAlert');
+    const modal = bootstrap.Modal.getOrCreateInstance('#loginModal');
+
+    setTimeout(() => {alert.close(); modal.hide()}, 1000);
+
+    return {html, logoutButton};
 }

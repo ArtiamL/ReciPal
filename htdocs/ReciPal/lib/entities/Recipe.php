@@ -8,7 +8,7 @@ use lib\entities\User;
 final class Recipe extends Entity {
     protected $id;
 
-    private $author, $curator, $title, $desc, $instructions, $date,
+    private $author, $curator, $title, $desc, $instructions, $date;
 
     public function __construct(...$args) {
 

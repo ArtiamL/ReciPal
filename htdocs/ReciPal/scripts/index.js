@@ -1,4 +1,4 @@
-import { appendAlert, loginButton, loggedInDropdown } from "./modules/HTMLElems.js";
+import { appendAlert, loginButton, loggedInDOMUpdate } from "./modules/HTMLElems.js";
 
 window.onload = function () {
     // Login
@@ -57,6 +57,8 @@ window.onload = function () {
         }, false);
     });
 
+    const navbar = document.querySelector('.navbar-nav #loginSection');
+
     document.body.addEventListener('submit', async event => {
         event.preventDefault();
 
@@ -69,7 +71,7 @@ window.onload = function () {
             .then(res => res.json().then(data => ({status: res.status, body: data})))
             .then(data => {
                 console.log(data);
-                appendAlert(data.status, document.querySelector('#' + form.id + ' #alertPlaceholder'), data.body.message);
+                appendAlert(document.querySelector('#' + form.id + ' #alertPlaceholder'), data.body.message, data.status);
 
                 if (data.body.session) {
                     const session = data.body.session;
@@ -85,11 +87,24 @@ window.onload = function () {
 
                         sessionStorage.setItem(uData, session[uData]);
                     }
+
+                    loggedInDOMUpdate(navbar);
+                } else if (data.status === 201) {
+                    
                 }
             })
             .catch(error => console.log(error));
 
     });
+
+    // For changing login display on page load if session exists.
+    const uname = sessionStorage.getItem('username')
+    if (uname) {
+        loggedInDOMUpdate(navbar);
+
+    } else {
+        loginButton(navbar);
+    }
 }
 
 function showPassword(passwordElem, viewBtn) {
@@ -104,41 +119,10 @@ function showPassword(passwordElem, viewBtn) {
 
 function checkPassword(container, passInp, confirmInp, submitBtn) {
     if (passInp !== confirmInp) {
-        appendAlert(container, 'Passwords do not match!', 'danger')
+        appendAlert(container, 'Passwords do not match!')
         submitBtn.disabled = true;
     } else {
         container.innerHTML = '';
         submitBtn.removeAttribute('disabled');
     }
-}
-
-async function handleResponse(response, data, container) {
-    let alertType = 'warning';
-    //
-    // console.log(data);
-    //
-    // data = JSON.parse(data);
-
-    console.log(response.status);
-    console.log(container);
-
-    switch (response.status) {
-        case 200:
-            alertType = 'success';
-            break;
-        case 201:
-            alertType = 'success';
-            // const redirect = (location.reload(), 5000) => await new Promise(resolve => setTimeout(resolve, 5000));
-        case 400:
-        case 500:
-            alertType = 'danger';
-            break;
-        case 409:
-            alertType = 'warning';
-            break;
-    }
-
-    appendAlert(container, data.message, alertType);
-
-    return data;
 }
