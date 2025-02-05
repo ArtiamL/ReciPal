@@ -61,7 +61,7 @@
     <h1 class="text-center mt-4">Our Favourite Recipes</h1>
     <div class="container mt-4">
         <div class="row">
-            <?php for ?>
+<!--            --><?php //for ?>
             <div class="col-md-6 col-lg-3">
                 <div class="card">
                     <img src="./img/biryani.jpg" class="card-img-top" alt="Biryani">

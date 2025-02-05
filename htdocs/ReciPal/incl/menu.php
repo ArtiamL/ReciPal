@@ -24,7 +24,7 @@
                     <a class="nav-link" href="./categories.php">About</a>
                 </li>
             </ul>
-            <div class="nav-item" id="loginSection">
+            <div id="loginSection">
             </div>
         </div>
     </div>

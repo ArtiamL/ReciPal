@@ -1,8 +1,8 @@
 import loginButton from "./loginButton.mjs";
 export default function loggedInDOMUpdate(container) {
     const html = container.innerHTML = [
-        `<li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        `<div class="dropdown">
+            <a class="btn btn-light me-2 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-user"></i> ${sessionStorage.getItem('username')}
             </a>
             <ul class="dropdown-menu">
@@ -11,7 +11,7 @@ export default function loggedInDOMUpdate(container) {
                 <li><hr class="dropdown-divider"></li>
                 <li><button type="submit" class="dropdown-item" id="logoutButton"><i class="fa-solid fa-power-off"></i> Logout</button></li>
             </ul>
-        </li>`
+        </div>`
     ].join('');
 
     const logoutButton = document.getElementById('logoutButton');

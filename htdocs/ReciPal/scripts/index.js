@@ -44,7 +44,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 
     confirmPassInp.addEventListener('input', (e) => {
-        checkPassword(document.querySelector('#alertPlaceholderSignUp'), signUpPassInp.value, e.target.value, submitButton);
+        checkPassword(document.getElementById('alertPlaceholderSignUp'), signUpPassInp.value, e.target.value, submitButton);
     });
 
     const forms = document.querySelectorAll('.needs-validation');
@@ -60,7 +60,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         }, false);
     });
 
-    const navbar = document.querySelector('.navbar-nav #loginSection');
+    const navbar = document.getElementById('loginSection');
 
     document.body.addEventListener('submit', async event => {
         event.preventDefault();
