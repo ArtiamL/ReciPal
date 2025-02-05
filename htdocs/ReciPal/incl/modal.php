@@ -19,7 +19,7 @@
                         <form method="post" action="./api/login" id="loginForm" class="needs-validation" autocomplete="on" novalidate>
                             <div id="alertPlaceholder" class="mb-3"></div>
                             <div class="mb-3">
-<!--                                TODO: Change to allow username as well as email.-->
+                                <!--                                TODO: Change to allow username as well as email.-->
                                 <label for="email" class="form-label">Email address</label>
                                 <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" aria-required="true" required>
                                 <div class="invalid-feedback">Please enter an Email address.</div>

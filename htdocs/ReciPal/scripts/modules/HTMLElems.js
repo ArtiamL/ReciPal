@@ -1,3 +1,5 @@
+
+
 export function appendAlert(container, message, code = null) {
     let alertType;
 
@@ -25,42 +27,16 @@ export function appendAlert(container, message, code = null) {
     ].join('')
 }
 
-export function loginButton(container) {
-    return container.innerHTML = [
-        `<li class="nav-item">
-            <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">
-                <i class="fa-solid fa-user"></i> Login/Sign Up
-            </button>
-        </li>`
-    ].join('')
+export function userProfile() {
+    if (sessionStorage.getItem('username')) {
+        // return profile
+    }
 }
 
-export function loggedInDOMUpdate(container) {
-    const html = container.innerHTML = [
-        `<li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user"></i> ${sessionStorage.getItem('username')}
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#" id="profileLink"><i class="fa-solid fa-user"></i> Profile</a></li>
-                <li><a class="dropdown-item" href="#" id="settingsLink"><i class="fa-solid fa-gear"></i> Settings</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><button type="submit" class="dropdown-item" id="logoutButton"><i class="fa-solid fa-power-off"></i> Logout</button></li>
-            </ul>
-        </li>`
-    ].join('');
+export function userSettings() {
+    if (!sessionStorage.getItem('username')) {
+        return document.body.innerHTML = [
 
-    const logoutButton = document.getElementById('logoutButton');
-
-    logoutButton.addEventListener('click', (e) => {
-        sessionStorage.clear();
-        loginButton(container);
-    });
-
-    const alert = bootstrap.Alert.getOrCreateInstance('#loginSignUpAlert');
-    const modal = bootstrap.Modal.getOrCreateInstance('#loginModal');
-
-    setTimeout(() => {alert.close(); modal.hide()}, 1000);
-
-    return {html, logoutButton};
+        ];
+    }
 }

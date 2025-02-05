@@ -29,23 +29,19 @@ class SessionController
         $user = $this->authModel->login($data["email"], $data["password"]);
 
         if ($user) {
-            // Set session variables (used internally before js transition).
-//            $_SESSION['user_uuid'] = $user->getUUID();
-//            $_SESSION['user_email'] = $user->getEmail();
-//            $_SESSION['username'] = $user->getUsername();
-//            $_SESSION['user_roles'] = $user->getRoles();
+//             Set session variables.
+            $_SESSION['user_uuid'] = $user->getUUID();
+            $_SESSION['user_email'] = $user->getEmail();
+            $_SESSION['username'] = $user->getUsername();
+            $_SESSION['user_roles'] = $user->getRoles();
 
             // Return '200 OK' to user
             http_response_code(200);
             // Redirect to referring page.
             echo json_encode([
                 "message" => "Logged in Successfully!",
-                "session" => [
-                "uuid" => $user->getUUID(),
-                "email" => $user->getEmail(),
-                "username" => $user->getUsername(),
-                "roles" => $user->getRoles()
-                ]
+                "authenticated" => true,
+                "username" => $user->getUsername()
             ]);
         } else {
             http_response_code(400);
@@ -58,6 +54,19 @@ class SessionController
         session_destroy();
         http_response_code(200);
         header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
+    public function checkSession() {
+        if (!isset($_SESSION['user_uuid'])) {
+            http_response_code(401);
+            echo json_encode(["message" => "Session Expired or Invalid!", "authenticated" => false]);
+        }
+
+        http_response_code(200);
+        echo json_encode(["message" => "Authenticated Successfully!",
+            "authenticated" => true,
+            "username" => $_SESSION['username']
+        ]);
     }
 
     public function register($login = false): void {

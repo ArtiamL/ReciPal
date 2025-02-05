@@ -1,6 +1,9 @@
-import { appendAlert, loginButton, loggedInDOMUpdate } from "./modules/HTMLElems.js";
+import { appendAlert} from "./modules/HTMLElems.js";
+import loggedInDOMUpdate from "./modules/elements/loggedInDOMUpdate.mjs";
+import loginButton from "./modules/elements/loginButton.mjs";
+import checkSession from "./modules/auth/checkSession.mjs";
 
-window.onload = function () {
+window.addEventListener("DOMContentLoaded", async () => {
     // Login
     document.getElementById('viewPasswordButton').addEventListener('click', (e) => {
         console.log('clicked');
@@ -73,25 +76,9 @@ window.onload = function () {
                 console.log(data);
                 appendAlert(document.querySelector('#' + form.id + ' #alertPlaceholder'), data.body.message, data.status);
 
-                if (data.body.session) {
-                    const session = data.body.session;
+                sessionStorage.setItem('username', data.body.username);
 
-                    for (const uData in session) {
-                        console.log(uData);
-                        console.log(session[uData]);
-
-                        if (typeof session[uData] === 'object' && session[uData] !== null)
-                            session[uData] = JSON.stringify(session[uData]);
-
-                        console.log(session[uData]);
-
-                        sessionStorage.setItem(uData, session[uData]);
-                    }
-
-                    loggedInDOMUpdate(navbar);
-                } else if (data.status === 201) {
-                    
-                }
+                loggedInDOMUpdate(navbar);
             })
             .catch(error => console.log(error));
 
@@ -105,7 +92,7 @@ window.onload = function () {
     } else {
         loginButton(navbar);
     }
-}
+});
 
 function showPassword(passwordElem, viewBtn) {
     viewBtn.classList.toggle("fa-eye");
