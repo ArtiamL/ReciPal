@@ -26,6 +26,7 @@ abstract class DAO
         $this->setTable($table);
     }
     abstract function create($obj);
+    abstract function create($obj, $dao);
     abstract function update($obj); // TODO: decide implementation. Should all fields be updated or only ones passed?
 
     protected final function getTables(): array

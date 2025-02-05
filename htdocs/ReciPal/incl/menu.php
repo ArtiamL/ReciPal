@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-body-tertiary bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">ReciPal</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -23,13 +23,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="./categories.php">About</a>
                 </li>
-                <li class="nav-item" id="loginSection">
-                </li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <div class="nav-item" id="loginSection">
+            </div>
         </div>
     </div>
 </nav>

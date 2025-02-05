@@ -9,6 +9,7 @@
     --secondary-darker: #00c6b1;
     --tertiary: #EB5E28;
     --text-grey: #4D535B;
+    /*--error:*/
 
     font-family: 'IMB Plex Sans', sans-serif;
     font-weight: 500;
@@ -37,6 +38,7 @@ h1, h2, h3, h4, h5, h6, li {
     font-family: 'IBM Plex Mono', monospace;
     font-weight: 500;
 
+    /*color: var(--text-grey);*/
     background: linear-gradient(to bottom right, var(--secondary), var(--secondary-darker));
     background-clip: text;
     color: transparent;
@@ -107,6 +109,15 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.bg-light {
+    --bs-bg-opacity: 1;
+    background-color: #8BC34A !important;
+}
+
+a.nav-link {
+    color: white;
 }
 
 .button {

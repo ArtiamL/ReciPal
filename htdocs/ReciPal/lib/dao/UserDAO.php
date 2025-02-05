@@ -81,24 +81,21 @@ final class UserDAO extends DAO
     }
 
     // TODO: refactor for API.
-    public function getUUIDFromID($id): string
-    {
+    public function getUUIDFromID($id): string {
         $stmt = $this->db->prepare("SELECT user_uuid FROM {$this->table} WHERE user_id = :id");
         $stmt->bindParam(":id", $id);
         $stmt->execute();
         return $stmt->fetchColumn();
     }
 
-    public function findByUUId($uuid): array
-    {
+    public function findByUUId($uuid): array {
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE uuid = :uuid");
         $stmt->bindParam(":uuid", $uuid);
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_COLUMN);
     }
 
-    function update($user)
-    {
+    function update($user) {
         $stmt  = $this->db->prepare("UPDATE {$this->table} SET name = :name, email = :email, password = :password WHERE id = :id");
         $stmt->bindParam(":id", $user->getId());
         $stmt->bindParam(":name", $user->getName());

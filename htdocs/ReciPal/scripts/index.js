@@ -84,6 +84,14 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     });
 
+    const myCarouselElement = document.querySelector('#foodCarousel')
+
+    const carousel = new bootstrap.Carousel(myCarouselElement, {
+        interval: 2000,
+        touch: false
+    })
+
+
     // For changing login display on page load if session exists.
     const uname = sessionStorage.getItem('username')
     if (uname) {
