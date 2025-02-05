@@ -18,7 +18,7 @@
 
     <script src="https://kit.fontawesome.com/7f67cc5608.js" crossorigin="anonymous" defer></script>
 
-    <script src="./scripts/index.js" defer></script>
+    <script type="module" src="./scripts/index.js" defer></script>
 
     <title>ReciPal</title>
 </head>

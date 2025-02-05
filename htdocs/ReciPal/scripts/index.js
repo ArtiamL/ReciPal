@@ -1,52 +1,4 @@
-
-
-// let showPost = function(response, isCurated) {
-//     if (respose.readyState === 4 && response.status === 200){
-//         if (isCurated) {
-//             const container = document.getElementById("curated_posts");
-//             // const template =
-//             let curated = JSON.parse(response.responseText);
-//             curated.forEach((element) => {
-//
-//             })
-//         }
-//
-//     }
-// }
-
-// function parseTemplate(template, container) {
-//     return fetch(template)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error("Failed to parse template");
-//             }
-//             return response.text();
-//         })
-//         .then(html => {
-//             const templateContainer = document.createElement("div");
-//             templateContainer.innerHTML = html;
-//             const template = templateContainer.querySelector("#post_collapsed");
-//             const elemContainer = container;
-//         })
-// }
-
-// async function getCuratedPosts() {
-//     const response = await fetch('./api/posts/curated/short');
-//     return await response.json();
-// }
-
-document.onreadystatechange = function () {
-    if (document.readyState === "complete") {
-        // getCuratedPosts().then(r => console.log(r));
-
-
-
-        // const post_collapsed = template.getElementById("post_collapsed");
-        // const clone = post_collapsed.content.cloneNode(true);
-        // clone.querySelector(".post_heading").innerHTML = "Hello, world!";
-        // container.appendChild(post_collapsed);
-    }
-}
+import { appendAlert, loginButton, loggedInDropdown } from "./modules/HTMLElems.js";
 
 window.onload = function () {
     // Login
@@ -89,7 +41,7 @@ window.onload = function () {
 
 
     confirmPassInp.addEventListener('input', (e) => {
-        checkPassword(document.getElementById('alertPlaceholderSignUp'), signUpPassInp.value, e.target.value, submitButton);
+        checkPassword(document.querySelector('#alertPlaceholderSignUp'), signUpPassInp.value, e.target.value, submitButton);
     });
 
     const forms = document.querySelectorAll('.needs-validation');
@@ -110,26 +62,34 @@ window.onload = function () {
 
         const form = event.target;
 
-        console.log(form);
-
-        const result = fetch(form.action, {
+        fetch(form.action, {
             method: form.method,
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(new FormData(form)),
+            body: new FormData(form),
         })
-            .then(res => res.json())
-            .then(json => console.log(json))
-            .catch(error => console.log(error));
-    });
-}
+            .then(res => res.json().then(data => ({status: res.status, body: data})))
+            .then(data => {
+                console.log(data);
+                appendAlert(data.status, document.querySelector('#' + form.id + ' #alertPlaceholder'), data.body.message);
 
-function appendAlert(container, message, type) {
-    container.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible d-flex align-items-center" role="alert">
-            <div>${message}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>`
-    ].join('')
+                if (data.body.session) {
+                    const session = data.body.session;
+
+                    for (const uData in session) {
+                        console.log(uData);
+                        console.log(session[uData]);
+
+                        if (typeof session[uData] === 'object' && session[uData] !== null)
+                            session[uData] = JSON.stringify(session[uData]);
+
+                        console.log(session[uData]);
+
+                        sessionStorage.setItem(uData, session[uData]);
+                    }
+                }
+            })
+            .catch(error => console.log(error));
+
+    });
 }
 
 function showPassword(passwordElem, viewBtn) {
@@ -150,5 +110,35 @@ function checkPassword(container, passInp, confirmInp, submitBtn) {
         container.innerHTML = '';
         submitBtn.removeAttribute('disabled');
     }
+}
 
+async function handleResponse(response, data, container) {
+    let alertType = 'warning';
+    //
+    // console.log(data);
+    //
+    // data = JSON.parse(data);
+
+    console.log(response.status);
+    console.log(container);
+
+    switch (response.status) {
+        case 200:
+            alertType = 'success';
+            break;
+        case 201:
+            alertType = 'success';
+            // const redirect = (location.reload(), 5000) => await new Promise(resolve => setTimeout(resolve, 5000));
+        case 400:
+        case 500:
+            alertType = 'danger';
+            break;
+        case 409:
+            alertType = 'warning';
+            break;
+    }
+
+    appendAlert(container, data.message, alertType);
+
+    return data;
 }

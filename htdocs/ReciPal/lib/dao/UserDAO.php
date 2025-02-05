@@ -15,7 +15,7 @@ final class UserDAO extends DAO
 
     public function getUserByEmail($email): array|bool {
         $stmt = $this->db->prepare("SELECT u.user_uuid, u.email, u.username, u.password_hash, u.active, GROUP_CONCAT(r.role_name SEPARATOR ', ') AS roles
-            FROM `{$this->table}` u
+            FROM {$this->table} u
             LEFT JOIN user_role ur on u.user_id = ur.user_id
             LEFT JOIN roles r on ur.role_id = r.role_id
             WHERE u.email = :email
@@ -33,16 +33,32 @@ final class UserDAO extends DAO
         return $row;
     }
 
+    public function exists(string $username, string $email): bool {
+        if (!isset($username, $email))
+            return false;
+
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE username = :username OR email = :email");
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        return (bool) $stmt->fetchColumn();
+    }
+
     public function create($user): bool {
         try {
+            $uuid = $user->getUuid();
+            $email = $user->getEmail();
+            $uname = $user->getUsername();
+            $password = $user->getPassword();
+
             // Use transaction for full rollback on fail with insertion into multiple tables.
             $this->db->beginTransaction();
 
-            $stmt = $this->db->prepare("INSERT INTO {$this->table}(`user_uuid`, `email`, `username`, `password_hash`) VALUES (:uuid, :email, :username, :password)");
-            $stmt->bindParam(":uuid", $user->getUUID());
-            $stmt->bindParam(":email", $user->getEmail());
-            $stmt->bindParam(":username", $user->getUsername());
-            $stmt->bindParam(":password", $user->getPassword());
+            $stmt = $this->db->prepare("INSERT INTO {$this->table}(user_uuid, email, username, password_hash) VALUES (:uuid, :email, :username, :password)");
+            $stmt->bindParam(":uuid", $uuid);
+            $stmt->bindParam(":email", $email);
+            $stmt->bindParam(":username", $uname);
+            $stmt->bindParam(":password", $password);
             $stmt->execute();
             $lastInsertId = $this->db->lastInsertId();
 
@@ -50,7 +66,7 @@ final class UserDAO extends DAO
             $stmt->execute();
             $roleID = $stmt->fetchColumn();
 
-            $stmt = $this->db->prepare("INSERT INTO user_role (`user_id`, `role_id`) VALUES (:user_id, :role_id)");
+            $stmt = $this->db->prepare("INSERT INTO user_role (user_id, role_id) VALUES (:user_id, :role_id)");
             $stmt->bindParam(":user_id", $lastInsertId);
             $stmt->bindParam(":role_id", $roleID);
             $stmt->execute();

@@ -10,13 +10,13 @@ class User {
     private $isActive;
     private $roles = [];
 
-    public function __construct(array $data, array $roles = []) {
+    public function __construct(array $data) {
         $this->UUID = $data['user_uuid'] ?? null;
         $this->username = $data['username'];
         $this->email = $data['email'];
         $this->passwordHash = $data['password_hash'] ?? null;
-        $this->isActive = (bool) $data['active'];
-        $this->roles = array_values($roles);
+        $this->isActive = $data['active'] ?? true;
+        $this->roles = $data['roles'] ?? [];
     }
 
     public function getUUID() {
@@ -53,6 +53,14 @@ class User {
 
     public function getRoles(): array {
         return $this->roles;
+    }
+
+    public function getRolesAsStringArr(): array {
+        $strRoles = [];
+
+        foreach ($this->roles as $role) {
+//            strRoles[] = $role.__toString();
+        }
     }
 
     public function getUsername() {

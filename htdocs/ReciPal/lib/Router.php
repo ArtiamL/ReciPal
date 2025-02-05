@@ -129,6 +129,8 @@ class Router
             error_log("Generated Regex: $routeRegex");
             error_log("Request Path: $path");
 
+            error_log("POST: " . var_export($_POST, true));
+
             // Check if the requested route matches the current pattern.
             if (preg_match($routeRegex, $path, $matches)) {
 //                error_log($routeRegex);

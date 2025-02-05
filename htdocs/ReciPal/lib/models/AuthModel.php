@@ -21,7 +21,15 @@ final class AuthModel {
         $userData = $this->userDAO->getUserByEmail($email);
         if (!$userData) return null;
 
-        $user = $this->createUserObj($userData);
+        $userData['roles'] = array_flip($userData['roles']);
+
+        foreach ($userData['roles'] as $role => &$permission) {
+            $permission = $this->roleDAO->getPermissionsForRole($role);
+        }
+
+        $user = new User($userData);
+
+        error_log("AuthModel->login, 32: " . var_export($user, true));
 
         return $this->authenticate($user, $password) ? $user : null;
     }
@@ -33,22 +41,24 @@ final class AuthModel {
         return false;
     }
 
-    public function register(array $user): string {
-        $exists = $this->userDAO->getUserByEmail($_POST['email']);
-        echo var_export($exists, true);
+    /**
+     * @param array $user
+     * @return int 201 - Successfully registered.
+     *             500 - Failed to register.
+     *             409 - User already exists.
+     */
+    public function register(array $user): int {
+//        $exists = $this->userDAO->getUserByEmail($_POST['email']);
 
-        if ($exists) {
-            // TODO: Refactor into SessionController for better separation of concern.
-            http_response_code(409);
-            return json_encode(['message' => 'User already exists.', 'code' => 409]);
-        }
+        if ($this->userDAO->exists($user['username'], $user['email']))
+            return 409;
 
-        $userObj = new User($user, [new Role('enduser', $this->roleDAO->getPermissionsForRole('enduser'))]);
+        $userObj = new User($user, ['enduser', $this->roleDAO->getPermissionsForRole('enduser')]);
 
         $userObj->setPassword(password_hash($user['password'], PASSWORD_DEFAULT));
         $userObj->setUUID($this->generateUUIDv7());
 
-        return $this->userDAO->create($userObj) ? json_encode(['message' => 'Successfully Registered User', 'code' => 201]) : json_encode(['message' => 'Failed to register user.', 'code' => 500]);
+        return $this->userDAO->create($userObj) ? 201: 500; //? json_encode(['message' => 'Successfully Registered User', 'code' => 201]) : json_encode(['message' => 'Failed to register user.', 'code' => 500]);
     }
 
     public function deleteUser(string $user): bool {

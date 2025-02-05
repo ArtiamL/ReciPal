@@ -23,4 +23,8 @@ class Role {
     public function getPermissions() {
         return $this->permissions;
     }
+
+    public function __toString() {
+        return $this->name;
+    }
 }

@@ -47,5 +47,7 @@ $router->get("/", function() {
     echo "Hello, world!";
 });
 
+error_log("api/index POST: " . var_export($_POST, true));
+
 // Dispatch the router
 $router->dispatch();
