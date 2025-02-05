@@ -1,4 +1,6 @@
 import loginButton from "./loginButton.mjs";
+import {appendAlert} from "../HTMLElems.js";
+import submitForm from "./submitForm.mjs";
 export default function loggedInDOMUpdate(container) {
     const html = container.innerHTML = [
         `<div class="dropdown">
@@ -18,13 +20,35 @@ export default function loggedInDOMUpdate(container) {
 
     logoutButton.addEventListener('click', (e) => {
         sessionStorage.clear();
-        loginButton(container);
+
+        fetch('./api/logout', {
+            method: 'POST',
+            credentials: 'include'
+        })
+            .then(res => {
+                if (!res.ok) {
+                    appendAlert(window.body, "Unable to log out!", res.status);
+                    return false;
+                }
+                return res.json()
+            })
+            .then(() => {sessionStorage.clear(); loginButton(container);});
+
     });
+
+    const submitFormContainer = document.getElementById('recipeSubmitContainer');
 
     const alert = bootstrap.Alert.getOrCreateInstance('#loginSignUpAlert');
     const modal = bootstrap.Modal.getOrCreateInstance('#loginModal');
 
-    setTimeout(() => {alert.close(); modal.hide()}, 1000);
+    setTimeout(() => {
+        alert.close();
+        modal.hide();
 
-    return {html, logoutButton};
+        if (submitFormContainer) {
+            submitForm(submitFormContainer);
+        }
+    }, 1000);
+
+    return {html, logoutButton, submitFormContainer};
 }

@@ -12,16 +12,16 @@
                     <a class="nav-link active" aria-current="page" href="./index.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./categories.php">Categories</a>
+                    <a class="nav-link" href="./recipeCategories.php">Recipe Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./categories.php">Create</a>
+                    <a class="nav-link" href="./submitrecipe.php">Submit Recipe</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./categories.php">Contact</a>
+                    <a class="nav-link" href="./about.php">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="./categories.php">About</a>
+                    <a class="nav-link" href="./contact.php">Contact Us</a>
                 </li>
             </ul>
             <div id="loginSection">

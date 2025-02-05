@@ -17,9 +17,9 @@ final class AuthModel {
         $this->roleDAO = $roleDAO;
     }
 
-    public function login(string $email, string $password): ?User {
+    public function login(string $email, string $password): array|int {
         $userData = $this->userDAO->getUserByEmail($email);
-        if (!$userData) return null;
+        if (!$userData) return 404;
 
         $userData['roles'] = array_flip($userData['roles']);
 
@@ -27,15 +27,24 @@ final class AuthModel {
             $permission = $this->roleDAO->getPermissionsForRole($role);
         }
 
-        $user = new User($userData);
+        error_log(var_export($userData, true));
 
-        error_log("AuthModel->login, 32: " . var_export($user, true));
+//        $user = new User($userData);
 
-        return $this->authenticate($user, $password) ? $user : null;
+//        error_log("AuthModel->login, 32: " . var_export($user, true));
+
+        if ($this->authenticate($userData['password_hash'], $password)) {
+            $userData['code'] = 200;
+            return $userData;
+        }
+
+        return 400;
+
+//        return $this->authenticate($userData['password_hash'], $password) ? $userData : 400;
     }
 
-    private function authenticate(User $user, string $password): bool {
-        if (password_verify($password, $user->getPassword())) {
+    private function authenticate(string $userPass, string $password): bool {
+        if (password_verify($password, $userPass)) {
             return true;
         }
         return false;

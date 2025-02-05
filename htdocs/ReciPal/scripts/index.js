@@ -76,30 +76,36 @@ window.addEventListener("DOMContentLoaded", async () => {
                 console.log(data);
                 appendAlert(document.querySelector('#' + form.id + ' #alertPlaceholder'), data.body.message, data.status);
 
-                sessionStorage.setItem('username', data.body.username);
+                if (data.status === 200) {
+                    sessionStorage.setItem('username', data.body.username);
+                    sessionStorage.setItem('user_uuid', data.body.user_uuid);
+                    loggedInDOMUpdate(navbar);
+                }
 
-                loggedInDOMUpdate(navbar);
             })
             .catch(error => console.log(error));
 
     });
 
-    const myCarouselElement = document.querySelector('#foodCarousel')
-
-    const carousel = new bootstrap.Carousel(myCarouselElement, {
-        interval: 2000,
-        touch: false
-    })
-
-
     // For changing login display on page load if session exists.
-    const uname = sessionStorage.getItem('username')
+    const uname = sessionStorage.getItem('username');
+    // const recipeSubmitContainer = document.getElementById('recipeSubmitContainer');
+
     if (uname) {
         loggedInDOMUpdate(navbar);
-
     } else {
         loginButton(navbar);
     }
+
+    const myCarouselElement = document.querySelector('#foodCarousel');
+
+    if (myCarouselElement) {
+        const carousel = new bootstrap.Carousel(myCarouselElement, {
+            interval: 2000,
+            touch: false
+        });
+    }
+
 });
 
 function showPassword(passwordElem, viewBtn) {

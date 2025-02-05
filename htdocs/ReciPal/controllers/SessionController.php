@@ -28,26 +28,31 @@ class SessionController
 
         $user = $this->authModel->login($data["email"], $data["password"]);
 
-        $code = 404;
+        error_log("SessionController->login, line 31: " .var_export($user, true));
 
-        if ($user) {
+        if (is_array($user)) {
 //          Set session variables.
-            $_SESSION['user_uuid'] = $user->getUUID();
-            $_SESSION['user_email'] = $user->getEmail();
-            $_SESSION['username'] = $user->getUsername();
-            $_SESSION['user_roles'] = $user->getRoles();
+            $_SESSION['user_uuid'] = $user['user_uuid'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['user_roles'] = $user['roles'];
 
-            $code = 200;
+            self::handleHTTPResponse($user['code'], ['username' => $user['username'], 'user_uuid' => $user['user_uuid']]);
+            return;
         }
 
-        self::handleHTTPResponse($code, $user);
+        self::handleHTTPResponse($user);
     }
 
     public function logout() {
         unset($_SESSION);
         session_destroy();
         http_response_code(200);
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        echo json_encode([
+            "message" => "Logged out!",
+            "authenticated" => false
+        ]);
+//        header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
     public function checkSession() {
@@ -59,7 +64,8 @@ class SessionController
         http_response_code(200);
         echo json_encode(["message" => "Authenticated Successfully!",
             "authenticated" => true,
-            "username" => $_SESSION['username']
+            "username" => $_SESSION['username'],
+            "user_uuid" => $_SESSION['user_uuid'],
         ]);
     }
 
@@ -98,7 +104,7 @@ class SessionController
         return json_encode(["message" => "User Deleted Successfully!"]);
     }
 
-    private static function handleHTTPResponse($code, $user = null): void {
+    private static function handleHTTPResponse($code, array $user = null): void {
         switch ($code) {
             case 200:
                 // Return '200 OK' to user
@@ -107,7 +113,8 @@ class SessionController
                 echo json_encode([
                     "message" => "Logged in Successfully!",
                     "authenticated" => true,
-                    "username" => $user->getUsername()
+                    "username" => $user['username'],
+                    "user_uuid" => $user['user_uuid']
                 ]);
                 break;
             case 201:
