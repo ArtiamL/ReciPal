@@ -91,10 +91,10 @@ final class UserDAO extends DAO
 
     public function findByUUId($uuid): array
     {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE uuid = :uuid");
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE uuid = :uuid");
         $stmt->bindParam(":uuid", $uuid);
         $stmt->execute();
-        return $stmt->fetch();
+        return $stmt->fetch(\PDO::FETCH_COLUMN);
     }
 
     function update($user)
@@ -105,6 +105,12 @@ final class UserDAO extends DAO
         $stmt->bindParam(":email", $user->getEmail());
         $stmt->bindParam(":password", $user->getPassword());
         $stmt->execute();
+    }
+
+    public function deactivate($userUUID) {
+        $stmt = $this->db->prepare("UPDATE {$this->table} SET active = 0 WHERE user_uuid = :uuid");
+        $stmt->bindParam(":uuid", $userUUID);
+        return $stmt->execute();
     }
 
     function delete($user) {

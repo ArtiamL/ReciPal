@@ -51,14 +51,14 @@ final class AuthModel {
 //        $exists = $this->userDAO->getUserByEmail($_POST['email']);
 
         if ($this->userDAO->exists($user['username'], $user['email']))
-            return 409;
+            return 409; // TODO: decide whether to return status codes or bool
 
-        $userObj = new User($user, ['enduser', $this->roleDAO->getPermissionsForRole('enduser')]);
+        $userObj = new User($user); // TODO: decide whether to refactor this to remove need for obj, as it is not currently being passed due to recent changes.
 
         $userObj->setPassword(password_hash($user['password'], PASSWORD_DEFAULT));
         $userObj->setUUID($this->generateUUIDv7());
 
-        return $this->userDAO->create($userObj) ? 201: 500; //? json_encode(['message' => 'Successfully Registered User', 'code' => 201]) : json_encode(['message' => 'Failed to register user.', 'code' => 500]);
+        return $this->userDAO->create($userObj) ? 201: 500;
     }
 
     public function deleteUser(string $user): bool {
@@ -68,6 +68,14 @@ final class AuthModel {
         $user = $this->createUserObj($userData);
 
         return $this->userDAO->delete($user);
+    }
+
+    public function deactivateUser(string $userUUID): bool {
+        if (!$this->userDAO->findByUUId($userUUID))
+            return 404; // TODO: decide whether to return status codes or bool
+
+        if ($this->userDAO->deactivate($userUUID))
+            return 204;
     }
 
     # Author: Zhiyanov, A.
@@ -96,6 +104,7 @@ final class AuthModel {
             return bin2hex($value);
     }
 
+    // TODO: delete? no longer necessary?
     private function createUserObj(array $userData): ?User {
         $roles = [];
 

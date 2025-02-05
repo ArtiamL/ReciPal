@@ -9,6 +9,8 @@ class SessionController
 {
     private AuthModel $authModel;
 
+    // TODO: Make User private static field?
+
     public function __construct(AuthModel $authModel) {
         $this->authModel = $authModel;
         header('Content-type: application/json');
@@ -19,8 +21,6 @@ class SessionController
 
         $data = !empty($_POST) ? $_POST : json_decode($input, true);
 
-        error_log("SessionController->login(), line 20: " . var_export($data, true));
-
         if (empty($data["email"]) || empty($data["password"])) {
             http_response_code(400);
             echo json_encode(["message" => "Missing Credentials!"]);
@@ -28,25 +28,19 @@ class SessionController
 
         $user = $this->authModel->login($data["email"], $data["password"]);
 
+        $code = 404;
+
         if ($user) {
-//             Set session variables.
+//          Set session variables.
             $_SESSION['user_uuid'] = $user->getUUID();
             $_SESSION['user_email'] = $user->getEmail();
             $_SESSION['username'] = $user->getUsername();
             $_SESSION['user_roles'] = $user->getRoles();
 
-            // Return '200 OK' to user
-            http_response_code(200);
-            // Redirect to referring page.
-            echo json_encode([
-                "message" => "Logged in Successfully!",
-                "authenticated" => true,
-                "username" => $user->getUsername()
-            ]);
-        } else {
-            http_response_code(400);
-            echo json_encode(["message" => "Invalid Credentials!"]);
+            $code = 200;
         }
+
+        self::handleHTTPResponse($code, $user);
     }
 
     public function logout() {
@@ -79,26 +73,16 @@ class SessionController
 
         $data['active'] = true;
 
-        switch ($this->authModel->register($data)) {
-            case 201:
-                http_response_code(201);
-                echo json_encode([
-                    "message" => "Registered Successfully!",
-                ]);
-                break;
-            case 409:
-                http_response_code(401);
-                echo json_encode(["message" => "A user with that email/username already exists!"]);
-                break;
-            case 500:
-                http_response_code(500);
-                echo json_encode(["message" => "Failed to register user!"]);
-                break;
-        }
+        self::handleHTTPResponse($this->authModel->register($data));
 
         // Internal testing and when not using js fetch api.
         if ($login)
             $this->login();
+    }
+
+    public function deactivateUser() {
+        self::handleHTTPResponse($this->authModel->deactivateUser($_SESSION['uuid']));
+        $this->logout();
     }
 
     public function deleteUser() {
@@ -112,5 +96,47 @@ class SessionController
         http_response_code(200);
         $this->logout();
         return json_encode(["message" => "User Deleted Successfully!"]);
+    }
+
+    private static function handleHTTPResponse($code, $user = null): void {
+        switch ($code) {
+            case 200:
+                // Return '200 OK' to user
+                http_response_code(200);
+                // Redirect to referring page.
+                echo json_encode([
+                    "message" => "Logged in Successfully!",
+                    "authenticated" => true,
+                    "username" => $user->getUsername()
+                ]);
+                break;
+            case 201:
+                http_response_code(201);
+                echo json_encode([
+                    "message" => "Registered Successfully!",
+                ]);
+                break;
+            case 204:
+                http_response_code(204);
+                echo json_encode(["message" => "User Successfully Deleted!"]);
+                break;
+            case 400:
+                http_response_code(400);
+                echo json_encode(["message" => "Invalid Credentials!"]);
+                break;
+            case 409:
+                http_response_code(409);
+                echo json_encode(["message" => "A user with that email/username already exists!"]);
+                break;
+            case 500:
+                http_response_code(500);
+                echo json_encode(["message" => "Failed to register user!"]);
+                break;
+            case 404:
+            default:
+                http_response_code(404);
+                echo json_encode(["message" => "User Not Found!"]);
+                break;
+        }
     }
 }

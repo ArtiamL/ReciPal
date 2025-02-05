@@ -40,6 +40,8 @@ if (isset($userDAO) && isset($roleDAO)) {
     $router->post("/logout", [$sessionController, "logout"]);
 
     $router->post('/checkSession', [$sessionController, "checkSession"]);
+
+    $router->delete('/deleteUser', [$sessionController, "deactivateUser"]);
 }
 
 $router->addMiddleware('/admin', [\lib\middlewares\AuthMiddleware::class, 'handle'], ['admin']);
