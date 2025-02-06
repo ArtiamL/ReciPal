@@ -1,7 +1,7 @@
 import loginButton from "./loginButton.mjs";
 import {appendAlert} from "../HTMLElems.js";
 import submitForm from "./submitForm.mjs";
-export default function loggedInDOMUpdate(container) {
+export default function loggedInDOMUpdate(container, formContainer) {
     const html = container.innerHTML = [
         `<div class="dropdown">
             <a class="btn btn-light me-2 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,11 +32,11 @@ export default function loggedInDOMUpdate(container) {
                 }
                 return res.json()
             })
-            .then(() => {sessionStorage.clear(); loginButton(container);});
+            .then(() => {sessionStorage.clear(); loginButton(container, formContainer);});
 
     });
 
-    const submitFormContainer = document.getElementById('recipeSubmitContainer');
+    // const submitFormContainer = document.getElementById('recipeSubmitContainer');
 
     const alert = bootstrap.Alert.getOrCreateInstance('#loginSignUpAlert');
     const modal = bootstrap.Modal.getOrCreateInstance('#loginModal');
@@ -45,10 +45,11 @@ export default function loggedInDOMUpdate(container) {
         alert.close();
         modal.hide();
 
-        if (submitFormContainer) {
-            submitForm(submitFormContainer);
+        if (formContainer) {
+            console.log(formContainer);
+            submitForm(formContainer);
         }
     }, 1000);
 
-    return {html, logoutButton, submitFormContainer};
+    return {html, logoutButton}; //, submitFormContainer};
 }

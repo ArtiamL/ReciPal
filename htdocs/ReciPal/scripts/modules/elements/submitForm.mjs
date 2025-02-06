@@ -1,4 +1,6 @@
 export default function submitForm(container) {
+    const ctnr = document.getElementById(container);
+
     return container.innerHTML = [
         `<form action="./api/submit" method="POST" enctype="multipart/form-data" id="recipeSubmitForm">
             <div class="mb-3">

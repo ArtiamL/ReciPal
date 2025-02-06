@@ -59,6 +59,7 @@ class SessionController
         if (!isset($_SESSION['user_uuid'])) {
             http_response_code(401);
             echo json_encode(["message" => "Session Expired or Invalid!", "authenticated" => false]);
+            return;
         }
 
         http_response_code(200);

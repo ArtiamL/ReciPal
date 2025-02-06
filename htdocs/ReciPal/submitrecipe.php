@@ -15,14 +15,14 @@
     <header>
         <?php include_once './incl/navbar.php' ?>
 
-        <script type="module">
-            import loginButton from './scripts/modules/elements/loginButton.mjs';
-
-            const loginSection = document.getElementById('loginSection');
-
-            // loginModal(header);
-            loginButton(loginSection);
-        </script>
+<!--        <script type="module">-->
+<!--            import loginButton from './scripts/modules/elements/loginButton.mjs';-->
+<!---->
+<!--            const loginSection = document.getElementById('loginSection');-->
+<!---->
+<!--            // loginModal(header);-->
+<!--            loginButton(loginSection);-->
+<!--        </script>-->
     </header>
 
     <main>
@@ -32,46 +32,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card shadow-sm p-4" id="recipeSubmitContainer">
-                        <script type="module">
-                            import submitForm from "./scripts/modules/elements/submitForm.mjs";
-                            import checkSession from "./scripts/modules/auth/checkSession.mjs";
 
-                            const container = document.getElementById("recipeSubmitContainer");
-
-                            const session = await checkSession();//.then(res => console.log(res));
-
-                            console.log(session);
-
-                            if (session)
-                                submitForm(document.getElementById("recipeSubmitContainer"));
-                            // } else {
-                            //     document.getElementById("recipeSubmitContainer").innerHTML = `<h3>Please Login</h3>`;
-                            // }
-                        </script>
-<!--                        --><?php //if(isset($_SESSION['user_uuid'])): ?>
-<!--                            <form action="submit_recipe.php" method="POST" enctype="multipart/form-data" id="recipeSubmitForm">-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="recipeName" class="form-label">Recipe Name</label>-->
-<!--                                    <input type="text" class="form-control" id="recipeName" name="recipeName" placeholder="Enter recipe name" required>-->
-<!--                                </div>-->
-<!---->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="recipeImage" class="form-label">Upload Recipe Image</label>-->
-<!--                                    <input type="file" class="form-control" id="recipeImage" name="recipeImage" required>-->
-<!--                                </div>-->
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="recipeDescription" class="form-label">Recipe Description</label>-->
-<!--                                    <textarea class="form-control" id="recipeDescription" name="recipeDescription" rows="4" placeholder="Write a short description of your recipe" required></textarea>-->
-<!--                                </div>-->
-<!--                                <button type="submit" class="btn btn-success w-100">Submit Recipe</button>-->
-<!--                            </form>-->
-<!--                        --><?php //else: ?>
-<!--                            <h3 class="text-center mb-4">Please Login</h3>-->
-<!--                            --><?php //include_once './incl/loginForm.php' ?>
-<!--                            <div class="text-center mb-4">-->
-<!--                                <button type="submit" class="btn btn-primary" form="loginForm" id="modalBtn">Login</button>-->
-<!--                            </div>-->
-<!--                        --><?php //endif; ?>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,8 @@ import { appendAlert} from "./modules/HTMLElems.js";
 import loggedInDOMUpdate from "./modules/elements/loggedInDOMUpdate.mjs";
 import loginButton from "./modules/elements/loginButton.mjs";
 import checkSession from "./modules/auth/checkSession.mjs";
+import submitForm from "./modules/elements/submitForm.mjs";
+import detailsForm from "./modules/elements/detailsForm.mjs";
 
 window.addEventListener("DOMContentLoaded", async () => {
     // Login
@@ -79,7 +81,9 @@ window.addEventListener("DOMContentLoaded", async () => {
                 if (data.status === 200) {
                     sessionStorage.setItem('username', data.body.username);
                     sessionStorage.setItem('user_uuid', data.body.user_uuid);
-                    loggedInDOMUpdate(navbar);
+
+                    if (recipeSubmitContainer)
+                        loggedInDOMUpdate(navbar, recipeSubmitContainer);
                 }
 
             })
@@ -89,12 +93,22 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     // For changing login display on page load if session exists.
     const uname = sessionStorage.getItem('username');
-    // const recipeSubmitContainer = document.getElementById('recipeSubmitContainer');
 
-    if (uname) {
-        loggedInDOMUpdate(navbar);
+    let cntr;
+
+    if (document.getElementById('recipeSubmitContainer'))
+        cntr = document.getElementById('recipeSubmitContainer');
+    else if (document.getElementById('uDetailsCntr'))
+        cntr = document.getElementById('uDetailsCntr');
+
+    console.log(cntr);
+
+    if (!uname) {
+        loginButton(navbar, cntr);
     } else {
-        loginButton(navbar);
+        loggedInDOMUpdate(navbar, cntr);
+        submitForm(cntr);
+        detailsForm(cntr);
     }
 
     const myCarouselElement = document.querySelector('#foodCarousel');
